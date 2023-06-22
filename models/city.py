@@ -17,3 +17,5 @@ class City(BaseModel, Base):
     (1 - many relationship) also create the attribute cities in class
     Place for easy access of city Object from Place
     """
+    places = relationship(
+            "Place", cascade="all, delete, delete-orphan", backref='city')
