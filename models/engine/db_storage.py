@@ -51,8 +51,7 @@ class DBStorage:
                 key = "{}.{}".format(obj.__class__.__name__, obj.id)
                 dic[key] = obj
         else:
-            #valid_classes = [State, City, User, Place, Review, Amenity]
-            valid_classes = [State, City, User, Place, Review]
+            valid_classes = [State, City, User, Place, Review, Amenity]
             for clss in valid_classes:
                 objects = self.__session.query(clss).all()
                 if len(objects) > 0:
