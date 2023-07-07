@@ -19,6 +19,10 @@ def total():
 def restart():
     sudo("systemctl restart nginx")
 
+def create_file():
+    run("rm /data/web_static/current/my_index.html")
+    restart()
+
 def loc():
     with lcd("versions"):
         local("ls -l")

@@ -26,47 +26,47 @@ $ADD_CONF = "server {
 exec { 'update repository':
   command => 'apt-get -y update',
   path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-}
+} ->
 
 exec { 'upgrade repository':
   command => 'apt-get -y upgrade',
   path    => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-}
+} ->
 
 package { 'nginx':
-  ensure   => 'installed',
+  ensure   => 'present',
   provider => 'apt'
-}
+} ->
 
 file { '/data':
   ensure  => 'directory'
-}
+} ->
 
 file { '/data/web_static':
   ensure => 'directory'
-}
+} ->
 
 file { '/data/web_static/releases':
   ensure => 'directory'
-}
+} ->
 
 file { '/data/web_static/releases/test':
   ensure => 'directory'
-}
+} ->
 
 file { '/data/web_static/shared':
   ensure => 'directory'
-}
+} ->
 
 file { '/data/web_static/releases/test/index.html':
   ensure  => 'present',
   content => "My fake web page to deploy on my server\n"
-}
+} ->
 
 file { '/data/web_static/current':
   ensure => 'link',
   target => '/data/web_static/releases/test'
-}
+} ->
 
 exec { 'chown -R ubuntu:ubuntu /data/':
   path => '/usr/bin/:/usr/local/bin/:/bin/'
@@ -74,16 +74,16 @@ exec { 'chown -R ubuntu:ubuntu /data/':
 
 file { '/var/www':
   ensure => 'directory'
-}
+} ->
 
 file { '/var/www/html':
   ensure => 'directory'
-}
+} ->
 
 file { '/var/www/html/index.html':
   ensure  => 'present',
   content => "Holberton School Nginx\n"
-}
+} ->
 
 file { '/var/www/html/404.html':
   ensure  => 'present',
@@ -93,7 +93,7 @@ file { '/var/www/html/404.html':
 file { '/etc/nginx/sites-available/default':
   ensure  => 'present',
   content => $ADD_CONF
-}
+} ->
 
 exec { 'nginx restart':
   path => '/etc/init.d/'

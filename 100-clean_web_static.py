@@ -22,65 +22,26 @@ out-of-date archives, using the function do_clean:
              in your script)
 """
 from fabric.api import *
-from time import strftime
-import os.path
+import os
+
 env.hosts = ["54.237.54.19", "54.146.64.168"]
 env.user = "ubuntu"
 
 
-def do_pack():
-    """
-    Fabric script that generates a .tgz archive from the contents of the
-    web_static folder of your AirBnB Clone repo.
-    """
-    present_time = strftime("%Y%M%d%H%M%S")
-    try:
-        local("mkdir -p versions")
-        archived_file_name = "versions/web_static_{}.tgz".format(present_time)
-        local("tar -cvzf {} web_static/".format(archived_file_name))
-        return archived_file_name
-    except Exception:
-        return None
-
-
-def do_deploy(archive_path):
-    """Distributes an archive to your web servers"""
-    if not os.path.isfile(archive_path):
-        return False
-    try:
-        filename = archive_path.split("/")[-1]
-        rmv_ext = filename.split(".")[0]
-        path_rmv_ext = "/data/web_static/releases/{}/".format(rmv_ext)
-        symlink = "/data/web_static/current"
-        put(archive_path, "/tmp/")
-        run("mkdir -p {}".format(path_rmv_ext))
-        run("tar -xzf /tmp/{} -C {}".format(filename, path_rmv_ext))
-        run("rm /tmp/{}".format(filename))
-        run("mv {}web_static/* {}".format(path_rmv_ext, path_rmv_ext))
-        run("rm -rf {}web_static".format(path_rmv_ext))
-        run("rm -rf {}".format(symlink))
-        run("ln -s {} {}".format(path_rmv_ext, symlink))
-        return True
-    except Exception:
-        return False
-
-
-def deploy():
-    """creates and distributes an archive to your web servers"""
-    created_archive_path = do_pack()
-    if not created_archive_path:
-        return False
-    now_deploy = do_deploy(created_archive_path)
-    return now_deploy
-
-
 def do_clean(number=0):
     """deletes out-of-date archives"""
-    if number == 0:
+    if int(number) == 0:
         number = 1
-    with lcd('./versions'):
-        local("ls -lt | tail -n +{} | rev | cut -f1 -d" " | rev | \
-            xargs -d '\n' rm".format(1 + number))
-    with cd('/data/web_static/releases/'):
-        run("ls -lt | tail -n +{} | rev | cut -f1 -d" " | rev | \
-            xargs -d '\n' rm".format(1 + number))
+    else:
+        int(number)
+
+    archv = sorted(os.listdir("versions"))
+    [archv.pop() for i in range(number)]
+    with lcd("versions"):
+        [local("rm ./{}".format(j)) for j in archv]
+
+    with cd("/data/web_static/releases"):
+        archv = run("ls -tr").split()
+        archv = [j for j in archv if "web_static_" in j]
+        [archv.pop() for i in range(number)]
+        [run("rm -rf ./{}".format(j)) for j in archv]
