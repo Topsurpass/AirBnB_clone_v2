@@ -54,6 +54,7 @@ def do_deploy(archive_path):
         run("rm -rf {}web_static".format(path_rmv_ext))
         run("rm -rf {}".format(symlink))
         run("ln -s {} {}".format(path_rmv_ext, symlink))
+        print("New version deployed!")
         return True
     except Exception:
         return False

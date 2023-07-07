@@ -30,18 +30,12 @@ env.user = "ubuntu"
 
 def do_clean(number=0):
     """deletes out-of-date archives"""
-    if int(number) == 0:
-        number = 1
+    num = int(number)
+    if num == 0:
+        num = 2
     else:
-        int(number)
+        num += 1
 
-    archv = sorted(os.listdir("versions"))
-    [archv.pop() for i in range(number)]
-    with lcd("versions"):
-        [local("rm ./{}".format(j)) for j in archv]
-
-    with cd("/data/web_static/releases"):
-        archv = run("ls -tr").split()
-        archv = [j for j in archv if "web_static_" in j]
-        [archv.pop() for i in range(number)]
-        [run("rm -rf ./{}".format(j)) for j in archv]
+    local('cd versions ; ls -t | tail -n +{} | xargs rm -rf'.format(num))
+    path = '/data/web_static/releases'
+    run('cd {} ; ls -t | tail -n +{} | xargs rm -rf'.format(path, num))
