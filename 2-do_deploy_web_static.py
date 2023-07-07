@@ -23,9 +23,29 @@ archive to your web servers, using the function do_deploy:
     xx-web-02
     """
 from fabric.api import *
-import os.path
+import os
 env.hosts = ["54.237.54.19", "54.146.64.168"]
 env.user = "ubuntu"
+
+
+@runs_once
+def do_pack():
+    """
+    Fabric script that generates a .tgz archive from the contents of the
+    web_static folder of your AirBnB Clone repo.
+    """
+    if not os.path.isdir("versions"):
+        os.mkdir("versions")
+    present_time = strftime("%Y%M%d%H%M%S")
+    output = "versions/web_static_{}.tgz".format(present_time)
+    try:
+        print("Packing web_static to {}".format(output))
+        local("tar -cvzf {} web_static".format(output))
+        archize_size = os.stat(output).st_size
+        print("web_static packed: {} -> {} Bytes".format(output, archize_size))
+    except Exception:
+        output = None
+    return output
 
 
 def do_deploy(archive_path):
@@ -38,13 +58,13 @@ def do_deploy(archive_path):
         path_rmv_ext = "/data/web_static/releases/{}/".format(rmv_ext)
         symlink = "/data/web_static/current"
         put(archive_path, "/tmp/")
-        run("mkdir -p {}".format(path_rmv_ext))
-        run("tar -xzf /tmp/{} -C {}".format(filename, path_rmv_ext))
-        run("rm /tmp/{}".format(filename))
-        run("mv {}web_static/* {}".format(path_rmv_ext, path_rmv_ext))
-        run("rm -rf {}web_static".format(path_rmv_ext))
-        run("rm -rf {}".format(symlink))
-        run("ln -s {} {}".format(path_rmv_ext, symlink))
+        sudo("mkdir -p {}".format(path_rmv_ext))
+        sudo("tar -xzf /tmp/{} -C {}".format(filename, path_rmv_ext))
+        sudo("rm /tmp/{}".format(filename))
+        sudo("mv {}web_static/* {}".format(path_rmv_ext, path_rmv_ext))
+        sudo("rm -rf {}web_static".format(path_rmv_ext))
+        sudo("rm -rf {}".format(symlink))
+        sudo("ln -s {} {}".format(path_rmv_ext, symlink))
         print("New version deployed!")
         return True
     except Exception:

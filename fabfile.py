@@ -6,22 +6,20 @@ env.user = 'ubuntu'
 env.hosts = ['54.237.54.19', '54.146.64.168']
 
 def push_files():
-    put("./0-setup_web_static.sh", "./")
+    put("./101-setup_web_static.pp", "./")
 
 def execute_file():
-    run("chmod 755 0-setup_web_static.sh")
-    run("./0-setup_web_static.sh")
+    run("puppet apply 100-setup_web_static.pp")
 
 def total():
     #get(remote_path="./3-redirection", local_path="./")
     push_files()
-    execute_file()
+    #execute_file()
 def restart():
     sudo("systemctl restart nginx")
 
-def create_file():
-    run("rm /data/web_static/current/my_index.html")
-    restart()
+def delete_file():
+    sudo("rm -rf /data/")
 
 def loc():
     with lcd("versions"):
