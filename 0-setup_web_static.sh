@@ -20,14 +20,14 @@
 # Nginx after updating the configuration:
 # Use alias inside your Nginx configuration
 
-ADD_NEW_LOCATION="\\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n"
-
-sudo apt-get update
-sudo apt-get -y upgrade
-sudo apt-get -y install nginx
-sudo mkdir -p /data/web_static/releases/test/ /data/web_static/shared
-echo "My fake html file to test my nginx config" | sudo tee /data/web_static/releases/test/index.html
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
-sudo chown -hR ubuntu:ubuntu /data/
-sudo sed -i "56i $ADD_NEW_LOCATION" /etc/nginx/sites-available/default
-sudo service nginx start
+apt-get -y update
+apt-get -y install nginx
+service nginx start
+mkdir -p /data/web_static/releases/test/
+mkdir -p /data/web_static/shared/
+echo "Testing web static with fake content" > /data/web_static/releases/test/index.html
+ln -sf /data/web_static/releases/test/ /data/web_static/current
+chown -R ubuntu:ubuntu /data/
+sed -i '56i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t\tautoindex off;\n\t}\n' /etc/nginx/sites-available/default
+service nginx restart
+exit 0
