@@ -18,8 +18,8 @@ def total():
 def restart():
     sudo("systemctl restart nginx")
 
-def delete_file():
-    sudo("rm -rf /data/")
+def save_file():
+    sudo("echo 'Fake static page' > tee /data/web_static/releases/test/index.html")
 
 def loc():
     with lcd("versions"):
