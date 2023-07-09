@@ -25,7 +25,7 @@ ADD_NEW_LOCATION="\\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/curre
 sudo apt-get update
 sudo apt-get -y upgrade
 sudo apt-get -y install nginx
-sudo mkdir -p /data/web_static/releases/test /data/web_static/shared
+sudo mkdir -p /data/web_static/releases/test/ /data/web_static/shared
 echo "My fake html file to test my nginx config" | sudo tee /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -hR ubuntu:ubuntu /data/
