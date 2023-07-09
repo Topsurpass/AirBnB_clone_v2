@@ -24,6 +24,9 @@ archive to your web servers, using the function do_deploy:
     """
 from fabric.api import *
 import os
+from datetime import datetime
+import shlex
+
 env.hosts = ["54.237.54.19", "54.146.64.168"]
 env.user = "ubuntu"
 
