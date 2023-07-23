@@ -34,7 +34,7 @@ class State(BaseModel, Base):
         relationshipbetween State and City.
         """
         city_list = []
-        obj_store = models.storage.all("City").values()
+        obj_store = models.storage.all(City).values()
 
         for city in obj_store:
             if city.state_id == self.id:

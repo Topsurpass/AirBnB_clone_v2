@@ -28,11 +28,9 @@ class FileStorage:
         if cls is None:
             return self.__objects
         else:
-            copy_dic = self.__objects
-            for key in copy_dic:
-                c = key.split('.')
-                if c[0] == cls.__name__:
-                    new_obj[key] = self.__objects[key]
+            for key, value in self.__objects.items():
+                if key.startswith(cls.__name__):
+                    new_obj[key] = value
             return new_obj
 
     def new(self, obj):
