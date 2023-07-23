@@ -65,8 +65,8 @@ def odd_even_html(n):
 def tear_down(self):
     """The purpose of this teardown function is to close the current SQLAlchemy
     session after each request. Closing the session is important to ensure that
-    database connections are properly closed, resources are released, and potential
-    data leaks or connection issues are avoided.
+    database connections are properly closed, resources are released,
+    and potential data leaks or connection issues are avoided.
     """
     storage.close()
 
