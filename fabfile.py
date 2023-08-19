@@ -3,8 +3,8 @@ from fabric.api import *
 
 env.user = 'ubuntu'
 
-env.hosts = ['54.146.64.168']
-#env.hosts = ['54.237.54.19']
+#env.hosts = ['54.146.64.168']
+env.hosts = ['54.237.54.19']
 
 #copy file to remote current working directory
 def push_files():
